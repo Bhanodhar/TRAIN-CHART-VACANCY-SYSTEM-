@@ -1,5 +1,5 @@
 const Booking = require("../models/Booking");
-const Train = require("..models/Train");
+const Train= require("../models/Train");
 const generatePNR = require("../utils/generatePNR");
 
 
