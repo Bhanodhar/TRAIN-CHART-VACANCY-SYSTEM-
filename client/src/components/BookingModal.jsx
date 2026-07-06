@@ -35,8 +35,8 @@ const BookingModal = ({ train, onClose, onSuccess }) => {
         seatNumber: Number(formData.seatNumber),
         compartment: Number(formData.compartment),
       });
-      console.log(response)
-      onSuccess(response.data.booking);
+      // console.log(response)
+      onSuccess(response.data.bookingDetails);
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");
     } finally {

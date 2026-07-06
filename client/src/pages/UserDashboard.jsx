@@ -33,8 +33,7 @@ const UserDashboard = () => {
   const fetchMyBookings = async () => {
     try {
       const response = await axiosInstance.get("/booking/mybookings");
-      console.log(response.data);
-      
+      // console.log(response.data);
       setMyBookings(response.data);
 
     } catch (err) {
@@ -43,11 +42,13 @@ const UserDashboard = () => {
   };
 
   const handleBookSuccess = (newBooking) => {
+    // console.log(newBooking);
+    
     setSelectedTrain(null);
     setMyBookings([newBooking, ...myBookings]);
     setSuccessMsg("🎉 Ticket booked successfully!");
     setActiveTab("bookings");
-    setTimeout(() => setSuccessMsg(""), 4000);
+    setTimeout(() => setSuccessMsg(""), 3000);
   };
 
   const handleCancel = async (bookingId) => {
