@@ -45,7 +45,7 @@ function App(){
 
              {/* Protected user routes, Wrapped around UserRoute component */}
              <Route path="/user/dashboard" element={ <UserRoute> <UserDashboard/>  </UserRoute>} />
-             <Route path="/admin/dashbaord" element={<AdminRoute> <AdminDashboard/> </AdminRoute>} />
+             <Route path="/admin/dashboard" element={<AdminRoute> <AdminDashboard/> </AdminRoute>} />
 
              {/* Catch all - redirect to home */}
              <Route path="*" element={<Navigate to="/" />} />
