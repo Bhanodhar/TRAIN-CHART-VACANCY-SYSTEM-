@@ -35,11 +35,6 @@ const trainSchema=new mongoose.Schema(
                     type:String,
                     required:true,
                     trim:true,
-                },
-                departureTime:{
-                    type:String,
-                    required:true,
-                    trim:true,
                 }
             }],
         departureTime:{
