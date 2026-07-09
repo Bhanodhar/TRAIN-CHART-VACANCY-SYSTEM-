@@ -1,0 +1,48 @@
+name: Train Booking CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      MONGO_URI: ${{ secrets.MONGO_URI }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
+    steps:
+      # Step 1: Get the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      # Step 3: Install server dependencies
+      - name: Install server dependencies
+        run: |
+          cd server
+          npm install
+
+      # Step 4: Install client dependencies
+      - name: Install client dependencies
+        run: |
+          cd client
+          npm install
+
+      # Step 5: Build React app
+      - name: Build client
+        run: |
+          cd client
+          npm run build
+
+      # Step 6: Success
+      - name: Done
+        run: echo "✅ CI Pipeline passed!"
