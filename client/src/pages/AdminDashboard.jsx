@@ -30,7 +30,7 @@ const AdminDashboard = () => {
   const fetchAllBookings = async () => {
     try {
       const response = await axiosInstance.get("/booking/all");
-      console.log(response);
+      // console.log(response);
       setAllBookings(response.data.bookings || response.data);
     } catch (err) {
       console.error(err);
