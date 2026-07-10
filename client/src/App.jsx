@@ -7,6 +7,7 @@ import UserRegister from "./pages/UserRegister";
 import AdminLogin from "./pages/AdminLogin";
 import UserDashboard from "./pages/UserDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
+import ChartVacancy from "./pages/ChartVacancy";
 
 // Protected route for users
 const UserRoute= ({children})=>{
@@ -42,6 +43,7 @@ function App(){
             <Route path="/user/login" element={<UserLogin/>} />
             <Route path="/user/register" element={<UserRegister/>} />
             <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/chart-vacancy" element={<ChartVacancy />} />
 
              {/* Protected user routes, Wrapped around UserRoute component */}
              <Route path="/user/dashboard" element={ <UserRoute> <UserDashboard/>  </UserRoute>} />

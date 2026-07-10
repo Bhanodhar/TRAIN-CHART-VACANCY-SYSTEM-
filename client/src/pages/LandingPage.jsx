@@ -41,6 +41,9 @@ const LandingPage = () => {
           <button onClick={() => navigate("/user/login")} className="border-2 border-blue-600 text-blue-600 px-10 py-4 rounded-lg text-lg font-semibold hover:bg-blue-50 transition" >
             Login
           </button>
+          <button onClick={() => navigate("/chart-vacancy")} className="border-2 border-gray-400 text-gray-600 px-10 py-4 rounded-lg text-lg font-semibold hover:bg-gray-50 transition mt-4" >
+            🔍 Check Chart Vacancy
+          </button>
         </div>
       </div>
 
