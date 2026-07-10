@@ -53,6 +53,7 @@ const TrainForm = ({ onSuccess, onClose }) => {
         fare: Number(formData.fare),
         intermediateStations,
       });
+      // console.log(response.data); 
       onSuccess(response.data.train);
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");

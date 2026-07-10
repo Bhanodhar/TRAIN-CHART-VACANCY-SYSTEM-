@@ -25,10 +25,14 @@ try
     // Validate boarding and destination stations
     const allStations=[
         train.boardingPoint,
-        ...train.intermediateStations.map( (s)=> s.stationsName),
+        ...train.intermediateStations.map( (s)=> s.stationName),
         train.destinationPoint,
     ];
 
+      // // ADD THIS LINE
+      // console.log("All stations:", allStations);
+      // console.log("Boarding received:", boardingStation);
+      // console.log("Destination received:", destinationStation);
 
     if (!allStations.includes(boardingStation)) {
       return res.status(400).json({ message: "Invalid boarding station" });
