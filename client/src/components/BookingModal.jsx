@@ -8,6 +8,10 @@ const BookingModal = ({ train, onClose, onSuccess }) => {
     train.destinationPoint,
   ];
 
+
+
+
+
   const [formData, setFormData] = useState({
     boardingStation: "",
     destinationStation: "",
@@ -35,7 +39,7 @@ const BookingModal = ({ train, onClose, onSuccess }) => {
         seatNumber: Number(formData.seatNumber),
         compartment: Number(formData.compartment),
       });
-      // console.log(response)
+      // console.log(response.data)
       onSuccess(response.data.bookingDetails);
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");
