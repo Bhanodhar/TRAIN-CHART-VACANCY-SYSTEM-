@@ -7,9 +7,9 @@ const SeatGrid = ({ seatMap, filter, stationFilter, allStations }) => {
   const getSeatColor = (status) => {
     switch (status) {
       case "full":
-        return "bg-black-500 text-white cursor-not-allowed";
+        return "bg-black  text-white cursor-not-allowed";
       case "partial":
-        return "bg-green-400 text-white cursor-pointer hover:bg-green-500";
+        return "bg-green-400 border border-green-400 text-white cursor-pointer hover:bg-green-500";
       case "vacant":
         return "bg-white border-2 border-gray-300 text-gray-700 cursor-pointer hover:bg-blue-50";
       default:

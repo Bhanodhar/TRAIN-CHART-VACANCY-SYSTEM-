@@ -8,7 +8,7 @@ const SeatModal = ({ seat, onClose }) => {
       case "vacant":
         return "bg-blue-100 text-blue-700";
       default:
-        return "bg-white-100 text-gray-600";
+        return "bg-black-100 text-gray-600";
     }
   };
 
