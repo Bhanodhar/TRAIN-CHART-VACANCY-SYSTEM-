@@ -4,6 +4,9 @@ const Booking = require("../models/Booking");
 const Train = require("../models/Train");
 const generatePNR = require("../utils/generatePNR");
 
+const dotenv = require("dotenv");
+dotenv.config();
+
 // Initialize Razorpay
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
@@ -40,7 +43,7 @@ const createOrder = async (req, res) => {
       notes: {
         trainId,
         boardingStation,
-        destinationStation,
+        destinationStation, 
         seatNumber,
         compartment,
         userId: req.user.id,

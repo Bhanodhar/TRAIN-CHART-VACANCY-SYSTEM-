@@ -8,10 +8,6 @@ const BookingModal = ({ train, onClose, onSuccess }) => {
     train.destinationPoint,
   ];
 
-
-
-
-
   const [formData, setFormData] = useState({
     boardingStation: "",
     destinationStation: "",
@@ -32,18 +28,65 @@ const BookingModal = ({ train, onClose, onSuccess }) => {
     setLoading(true);
 
     try {
-      const response = await axiosInstance.post("/booking/book", {
+      // Step 1: Create order on backend
+      const orderResponse = await axiosInstance.post("/payment/create-order", {
         trainId: train._id,
         boardingStation: formData.boardingStation,
         destinationStation: formData.destinationStation,
         seatNumber: Number(formData.seatNumber),
         compartment: Number(formData.compartment),
       });
-      // console.log(response.data)
-      onSuccess(response.data.bookingDetails);
+
+      const { order, fare, keyId } = orderResponse.data;
+
+      // Step 2: Open Razorpay popup
+      const options = {
+        key: keyId,
+        amount: order.amount,
+        currency: "INR",
+        name: "TrainBook",
+        description: `${train.trainName} - Seat ${formData.seatNumber}`,
+        order_id: order.id,
+        handler: async (response) => {
+          // Step 3: Verify payment on backend
+          try {
+            const verifyResponse = await axiosInstance.post("/payment/verify", {
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+              trainId: train._id,
+              boardingStation: formData.boardingStation,
+              destinationStation: formData.destinationStation,
+              seatNumber: Number(formData.seatNumber),
+              compartment: Number(formData.compartment),
+            });
+
+            onSuccess(verifyResponse.data.booking);
+          } catch (err) {
+            setError("Payment verification failed. Contact support.");
+            setLoading(false);
+          }
+        },
+        prefill: {
+          name: "",
+          email: "",
+        },
+        theme: {
+          color: "#2563EB",
+        },
+        modal: {
+          ondismiss: () => {
+            setLoading(false);
+            setError("Payment cancelled.");
+          },
+        },
+      };
+
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
+
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");
-    } finally {
       setLoading(false);
     }
   };
@@ -55,9 +98,7 @@ const BookingModal = ({ train, onClose, onSuccess }) => {
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h3 className="text-xl font-bold text-gray-800">
-              Book Ticket
-            </h3>
+            <h3 className="text-xl font-bold text-gray-800">Book Ticket</h3>
             <p className="text-sm text-gray-500">
               {train.trainName} #{train.trainNumber}
             </p>
@@ -112,11 +153,17 @@ const BookingModal = ({ train, onClose, onSuccess }) => {
               className="border border-gray-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Select destination station</option>
-              {allStations.map((station, index) => (
-                <option key={index} value={station}>
-                  {station}
-                </option>
-              ))}
+              {allStations
+                .filter(
+                  (s) =>
+                    allStations.indexOf(s) >
+                    allStations.indexOf(formData.boardingStation)
+                )
+                .map((station, index) => (
+                  <option key={index} value={station}>
+                    {station}
+                  </option>
+                ))}
             </select>
           </div>
 
@@ -178,7 +225,7 @@ const BookingModal = ({ train, onClose, onSuccess }) => {
             disabled={loading}
             className="bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? "Booking..." : "Confirm Booking"}
+            {loading ? "Processing..." : `Pay ₹${train.fare}`}
           </button>
 
         </form>
