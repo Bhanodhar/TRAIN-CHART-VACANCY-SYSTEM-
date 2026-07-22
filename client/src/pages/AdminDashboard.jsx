@@ -8,12 +8,14 @@ const AdminDashboard = () => {
   const [allBookings, setAllBookings] = useState([]);
   const [activeTab, setActiveTab] = useState("trains");
   const [showTrainForm, setShowTrainForm] = useState(false);
+  const [users, setUsers]= useState([]);
   const [loading, setLoading] = useState(true);
   const [successMsg, setSuccessMsg] = useState("");
 
   useEffect(() => {
     fetchTrains();
     fetchAllBookings();
+    fetchUsers();
   }, []);
 
   const fetchTrains = async () => {
@@ -37,6 +39,15 @@ const AdminDashboard = () => {
     }
   };
 
+  const fetchUsers = async ()=>{
+    try{
+      const response = await axiosInstance.get("/user/all");
+      setUsers(response.data.users);
+    }catch(err){
+      console.error(err);
+    }
+  }
+
   const handleTrainCreated = (newTrain) => {
     setTrains([newTrain, ...trains]);
     setShowTrainForm(false);
@@ -55,6 +66,20 @@ const AdminDashboard = () => {
       console.error(err);
     }
   };
+
+  const handleDeleteUser = async (userId) => {
+  if (!window.confirm("Are you sure you want to delete this user and all their bookings?")) return;
+  try {
+    await axiosInstance.delete(`/user/${userId}`);
+    setUsers(users.filter((u) => u._id !== userId));
+    setSuccessMsg("🗑️ User deleted successfully!");
+    setTimeout(() => setSuccessMsg(""), 4000);
+  } catch (err) {
+
+    
+    console.error(err);
+  }
+};
 
   // Summary stats
   const totalTrains = trains.length;
