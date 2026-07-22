@@ -23,7 +23,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/train", trainRoutes);
 app.use("/api/booking", bookingRoutes);
-//app.use("/api/payment", paymentRoutes);
+app.use("/api/payment", paymentRoutes);
 
 
 app.get('/',(req,res)=>{
