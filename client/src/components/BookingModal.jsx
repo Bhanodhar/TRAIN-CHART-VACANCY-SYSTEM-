@@ -1,6 +1,8 @@
 import { useState } from "react";
 import axiosInstance from "../utils/axiosInstance";
 
+const PAYMENT_ENABLED = true;
+
 const BookingModal = ({ train, onClose, onSuccess }) => {
   const allStations = [
     train.boardingPoint,
@@ -28,6 +30,19 @@ const BookingModal = ({ train, onClose, onSuccess }) => {
     setLoading(true);
 
     try {
+      if (!PAYMENT_ENABLED) {
+        const bookingResponse = await axiosInstance.post("/booking/book", {
+          trainId: train._id,
+          boardingStation: formData.boardingStation,
+          destinationStation: formData.destinationStation,
+          seatNumber: Number(formData.seatNumber),
+          compartment: Number(formData.compartment),
+        });
+
+        onSuccess(bookingResponse.data.bookingDetails);
+        return;
+      }
+
       // Step 1: Create order on backend
       const orderResponse = await axiosInstance.post("/payment/create-order", {
         trainId: train._id,
@@ -225,7 +240,11 @@ const BookingModal = ({ train, onClose, onSuccess }) => {
             disabled={loading}
             className="bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? "Processing..." : `Pay ₹${train.fare}`}
+            {loading
+              ? "Processing..."
+              : PAYMENT_ENABLED
+                ? `Pay ₹${train.fare}`
+                : `Book Ticket - ₹${train.fare}`}
           </button>
 
         </form>
